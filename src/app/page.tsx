@@ -65,7 +65,7 @@ export default function Home() {
                 <Link href="/contact">Book a Consultation <span className="arrow" aria-hidden>↗</span></Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="#services">View Services</Link>
+                <Link href="/services">View Services</Link>
               </Button>
             </div>
             <div className="hero__contact reveal">
@@ -209,6 +209,9 @@ export default function Home() {
               </details>
             ))}
           </div>
+          <p className="reveal" style={{ marginTop: "var(--s4)" }}>
+            <Link className="link-ghost" href="/faq">See all FAQs <span className="arrow" aria-hidden>→</span></Link>
+          </p>
         </div>
       </section>
 

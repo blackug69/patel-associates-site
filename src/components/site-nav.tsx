@@ -7,10 +7,12 @@ import { Button } from "@/components/ui/button";
 
 const LINKS = [
   { href: "/", label: "Home" },
-  { href: "/#about", label: "About" },
-  { href: "/#services", label: "Services" },
+  { href: "/services", label: "Services" },
   { href: "/team", label: "Team" },
+  { href: "/results", label: "Results" },
+  { href: "/insights", label: "Insights" },
   { href: "/contact", label: "Contact" },
+  { href: "/faq", label: "FAQ" },
 ];
 
 export function SiteNav() {

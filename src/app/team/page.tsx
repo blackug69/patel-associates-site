@@ -18,7 +18,7 @@ export default function TeamPage() {
   return (
     <main>
       <section className="page-hero">
-        <div className="container" style={{ paddingTop: "var(--s7)" }}>
+        <div className="container">
           <p className="eyebrow reveal">Our team</p>
           <h1 className="reveal">The people behind Patel.</h1>
           <p className="page-hero__lead reveal">A practice built on relationships. You work directly with experienced people who know your file, not a call queue.</p>
@@ -80,7 +80,7 @@ export default function TeamPage() {
               <Link href="/contact">Book a Consultation <span className="arrow" aria-hidden>↗</span></Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/#services">View Services</Link>
+              <Link href="/services">View Services</Link>
             </Button>
           </div>
         </div>

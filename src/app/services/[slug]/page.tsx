@@ -32,7 +32,7 @@ export default async function ServicePage(
     <main>
       <section className="page-hero">
         <div className="container">
-          <p className="breadcrumb reveal"><Link href="/">Home</Link> / <Link href="/#services">Services</Link> / {service.title}</p>
+          <p className="breadcrumb reveal"><Link href="/">Home</Link> / <Link href="/services">Services</Link> / {service.title}</p>
           <span className="page-hero__icon reveal"><ServiceIcon slug={service.slug} /></span>
           <p className="eyebrow reveal">Service</p>
           <h1 className="reveal">{service.title}</h1>
@@ -42,7 +42,7 @@ export default async function ServicePage(
               <Link href="/contact">Book a Consultation <span className="arrow" aria-hidden>↗</span></Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/#services">All Services</Link>
+              <Link href="/services">All Services</Link>
             </Button>
           </div>
         </div>
