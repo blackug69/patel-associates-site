@@ -76,12 +76,13 @@ never lorem ipsum.
   (single route), drawing on the homepage FAQ plus a few more per group.
 - Homepage FAQ section (`page.tsx` `#faq`) stays as a short teaser; add a "See all FAQs →"
   link to `/faq`.
+- FAQ is a top-level main-nav item (not footer-only). Footer keeps an FAQ link too.
 - Closes with `cta-strip`. `metadata` export.
 
 ### Navigation & footer
 
 - **`src/components/site-nav.tsx`** — `LINKS` becomes, all top-level:
-  `Home · Services · Team · Results · Insights · Contact`.
+  `Home · Services · Team · Results · Insights · Contact · FAQ`.
   Drop the `/#about` and `/#services` anchors. `/services` is now a real route so
   `isActive` highlighting works normally. Keep the "Book a Consultation" button.
 - **`src/components/site-footer.tsx`** — Company column becomes
