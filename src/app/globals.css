@@ -33,6 +33,7 @@
 
   --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:96px;
   --section-y: clamp(56px, 6vw, 92px);
+  --nav-h: 76px;
   --radius-sm:8px; --radius-md:12px; --radius-lg:16px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -68,6 +69,23 @@
 .container { max-width: 1200px; margin: 0 auto; padding-inline: clamp(20px, 4vw, 40px); }
 .section { padding-block: var(--section-y); border-bottom: 1px solid var(--line); }
 #home.section { padding-block: clamp(32px, 4vw, 56px) var(--section-y); }
+/* Fit the hero within one viewport on desktop (above the stacking breakpoint) */
+@media (min-width: 761px) {
+  #home.section {
+    min-height: calc(100svh - var(--nav-h));
+    display: flex;
+    align-items: center;
+    padding-block: clamp(16px, 2vw, 40px);
+  }
+  #home .hero__grid { width: 100%; }
+  #home .eyebrow { margin-bottom: var(--s3); }
+  #home .hero__title { font-size: clamp(2rem, 3.6vw, 3.4rem); margin-bottom: var(--s3); }
+  #home .hero__lede { margin-bottom: var(--s4); }
+  #home .hero__ctas { margin-bottom: var(--s3); }
+  #home .hero__contact { margin-bottom: var(--s4); }
+  #home .stat { padding-block: var(--s3); }
+  #home .hero__media { max-height: calc(100svh - var(--nav-h) - 72px); }
+}
 
 .eyebrow {
   font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em;
