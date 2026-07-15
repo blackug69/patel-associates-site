@@ -24,7 +24,9 @@ export function SiteFooter() {
             <ul>
               <li><Link href="/#about">About</Link></li>
               <li><Link href="/team">Team</Link></li>
-              <li><Link href="/#industries">Industries</Link></li>
+              <li><Link href="/results">Results</Link></li>
+              <li><Link href="/insights">Insights</Link></li>
+              <li><Link href="/faq">FAQ</Link></li>
               <li><Link href="/contact">Contact</Link></li>
             </ul>
           </div>

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PatelContactForm } from "@/components/patel-contact-form";
 
 export const metadata: Metadata = {
-  title: "Contact · Patel Accounting & Legal Services",
+  title: "Contact",
   description: "Contact Patel Accounting & Legal Services, Ahmedabad. Call, WhatsApp, email, or send an enquiry.",
 };
 

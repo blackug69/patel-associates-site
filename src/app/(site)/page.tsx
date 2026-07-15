@@ -1,7 +1,12 @@
 import Link from "next/link";
-import { services } from "@/lib/services";
+import { getServices } from "@/lib/services";
+import { getTestimonials, getFaqs } from "@/lib/content";
 import { ServiceIcon } from "@/components/service-icon";
 import { Button } from "@/components/ui/button";
+
+// Rebuild hourly so content edits in Supabase surface without a redeploy.
+// (On-demand revalidation from the admin save actions is added in Phase 5.)
+export const revalidate = 3600;
 
 const WHY = [
   "Nearly two decades of professional experience",
@@ -30,21 +35,13 @@ const INDUSTRIES = [
   "Individuals & Salaried Employees",
 ];
 
-const TESTIMONIALS = [
-  { quote: "They took our GST filing off our plate entirely. Returns are on time and I finally understand my own numbers.", role: "Founder · [Company]" },
-  { quote: "Registered my company and set up the books in weeks. Clear advice, no surprises, genuinely responsive.", role: "Proprietor · [Business]" },
-  { quote: "A tax notice that worried me was handled calmly and correctly. This is the firm I recommend to everyone now.", role: "Director · [Company]" },
-];
-
-const HOME_FAQS = [
-  { q: "Who should file an Income Tax Return?", a: "Any individual or business whose income meets the applicable legal requirements, or who wishes to claim refunds, carry forward losses, or maintain financial records." },
-  { q: "Do you provide GST Registration?", a: "Yes. We provide complete GST Registration along with post registration compliance support." },
-  { q: "Can you handle bookkeeping for my business?", a: "Yes. We provide regular bookkeeping and accounting services for businesses of all sizes." },
-  { q: "Do you assist startups?", a: "Absolutely. We help startups with business registration, GST, accounting, taxation, and ongoing compliance." },
-  { q: "Can services be provided online?", a: "Yes. Most of our services can be completed digitally, allowing clients across India to work with us conveniently." },
-];
-
-export default function Home() {
+export default async function Home() {
+  const [services, testimonials, faqs] = await Promise.all([
+    getServices(),
+    getTestimonials(),
+    getFaqs(),
+  ]);
+  const homeFaqs = faqs.slice(0, 5);
   return (
     <main>
       {/* HERO */}
@@ -116,7 +113,7 @@ export default function Home() {
           <div className="services__grid">
             {services.map((s) => (
               <article className="card reveal" key={s.slug}>
-                <span className="card__icon"><ServiceIcon slug={s.slug} /></span>
+                <span className="card__icon"><ServiceIcon name={s.icon} /></span>
                 <h3>{s.title}</h3>
                 <ul className="card__list">
                   {s.included.map((i) => <li key={i.name}>{i.name}</li>)}
@@ -179,13 +176,13 @@ export default function Home() {
             <h2>Trusted by the businesses we serve.</h2>
           </div>
           <div className="quotes">
-            {TESTIMONIALS.map((t, i) => (
-              <figure className="quote reveal" key={i}>
+            {testimonials.map((t) => (
+              <figure className="quote reveal" key={t.id}>
                 <span className="quote__mark" aria-hidden>&ldquo;</span>
                 <blockquote><p>{t.quote}</p></blockquote>
                 <figcaption className="quote__who">
-                  <span className="quote__name">[Client name]</span>
-                  <span className="quote__role">{t.role}</span>
+                  <span className="quote__name">{t.author_name}</span>
+                  {t.author_role && <span className="quote__role">{t.author_role}</span>}
                 </figcaption>
               </figure>
             ))}
@@ -202,13 +199,16 @@ export default function Home() {
             <h2>Frequently asked questions.</h2>
           </div>
           <div className="faq__list reveal">
-            {HOME_FAQS.map((f) => (
-              <details className="faq__item" key={f.q}>
-                <summary>{f.q}</summary>
-                <p>{f.a}</p>
+            {homeFaqs.map((f) => (
+              <details className="faq__item" key={f.id}>
+                <summary>{f.question}</summary>
+                <p>{f.answer}</p>
               </details>
             ))}
           </div>
+          <p className="reveal" style={{ marginTop: "var(--s5)" }}>
+            <Link className="link-ghost" href="/faq">See all FAQs <span className="arrow" aria-hidden>→</span></Link>
+          </p>
         </div>
       </section>
 

@@ -1,6 +1,7 @@
 "use server";
 
 import { Resend } from "resend";
+import { createClient } from "@/lib/supabase/server";
 
 const OFFICE_EMAIL = "saurabhpateloffice2026@gmail.com";
 
@@ -63,6 +64,26 @@ export async function submitEnquiry(
     .filter(Boolean)
     .join("\n");
 
+  // Persist the lead first — this is the durable source of truth. If the DB
+  // write fails, tell the user (rather than silently losing the enquiry).
+  const supabase = await createClient();
+  const { error: insertError } = await supabase.from("leads").insert({
+    name,
+    phone,
+    email: email || null,
+    service: service || null,
+    message,
+  });
+  if (insertError) {
+    console.error("Failed to save enquiry:", insertError);
+    return {
+      status: "error",
+      message: "Something went wrong saving your message. Please call us instead.",
+    };
+  }
+
+  // Best-effort email notification. The lead is already saved, so an email
+  // failure must not fail the submission — just log it.
   try {
     if (resend) {
       await resend.emails.send({
@@ -73,15 +94,11 @@ export async function submitEnquiry(
         text: summary,
       });
     } else {
-      // No mail provider configured (e.g. local/demo). Capture the lead in logs.
+      // No mail provider configured (e.g. local/demo). Log the notification.
       console.info("[contact enquiry]\n" + summary);
     }
   } catch (err) {
-    console.error("Failed to send enquiry email:", err);
-    return {
-      status: "error",
-      message: "Something went wrong sending your message. Please call us instead.",
-    };
+    console.error("Failed to send enquiry email (lead was saved):", err);
   }
 
   return {

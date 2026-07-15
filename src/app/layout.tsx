@@ -1,17 +1,37 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { SiteNav } from "@/components/site-nav";
-import { SiteFooter } from "@/components/site-footer";
-import { ScrollReveals } from "@/components/scroll-reveals";
+import { SITE_URL, FIRM } from "@/lib/site";
 
 // NOTE: Fonts are declared via CSS font stacks in globals.css (Fraunces / Libre
 // Franklin / Spline Sans Mono with system fallbacks) rather than next/font/google,
 // so builds/dev never block on fetching from the Google Fonts CDN.
+//
+// Public chrome (nav/footer/WhatsApp) lives in (site)/layout.tsx, not here, so
+// the /admin panel does not inherit it. This root layout only owns <html>/<body>
+// and the sitewide metadata defaults.
+
+const DEFAULT_TITLE =
+  "Patel Accounting & Legal Services — Compliance, handled with clarity";
+const DEFAULT_DESCRIPTION =
+  "A legacy accounting and legal practice in Ahmedabad since 2006. GST, income tax, bookkeeping, business registration, and compliance, handled with clarity and confidence.";
 
 export const metadata: Metadata = {
-  title: "Patel Accounting & Legal Services — Compliance, handled with clarity",
-  description:
-    "A legacy accounting and legal practice in Ahmedabad since 2006. GST, income tax, bookkeeping, business registration, and compliance, handled with clarity and confidence.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: DEFAULT_TITLE,
+    template: "%s · Patel Accounting & Legal Services",
+  },
+  description: DEFAULT_DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    siteName: FIRM.name,
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    url: "/",
+  },
+  twitter: { card: "summary_large_image", title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION },
 };
 
 export default function RootLayout({
@@ -19,12 +39,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-theme="light">
-      <body>
-        <SiteNav />
-        {children}
-        <SiteFooter />
-        <ScrollReveals />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
