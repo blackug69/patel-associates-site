@@ -7,6 +7,7 @@ import { Toaster } from "@/components/admin/ui/sonner";
 import { Button } from "@/components/admin/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/admin/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/admin/ui/avatar";
+import { AdminThemeToggle, AdminThemeScript } from "@/components/admin/theme-toggle";
 
 export default async function PanelLayout({
   children,
@@ -41,6 +42,7 @@ export default async function PanelLayout({
 
   return (
     <div className="admin-root flex min-h-dvh">
+      <AdminThemeScript />
       <aside className="hidden w-64 shrink-0 border-r border-border bg-card md:block">
         {sidebar}
       </aside>
@@ -58,6 +60,7 @@ export default async function PanelLayout({
             </SheetContent>
           </Sheet>
           <span className="text-sm font-medium text-muted-foreground">Patel Admin</span>
+          <div className="ml-auto"><AdminThemeToggle /></div>
         </header>
         <main className="flex-1 p-6 lg:p-8">{children}</main>
       </div>
