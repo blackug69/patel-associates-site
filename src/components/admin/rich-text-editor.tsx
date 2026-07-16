@@ -113,7 +113,11 @@ function Toolbar({ editor }: { editor: Editor }) {
   );
 }
 
-export function RichTextEditor({ name, defaultHTML = "" }: { name: string; defaultHTML?: string }) {
+export function RichTextEditor({ name, defaultHTML = "", onChange }: {
+  name?: string;
+  defaultHTML?: string;
+  onChange?: (html: string) => void;
+}) {
   const [html, setHtml] = useState(defaultHTML);
 
   const editor = useEditor({
@@ -123,7 +127,11 @@ export function RichTextEditor({ name, defaultHTML = "" }: { name: string; defau
       Link.configure({ openOnClick: false }),
     ],
     content: defaultHTML,
-    onUpdate: ({ editor }) => setHtml(editor.getHTML()),
+    onUpdate: ({ editor }) => {
+      const h = editor.getHTML();
+      setHtml(h);
+      onChange?.(h);
+    },
     editorProps: {
       attributes: {
         class: cn(
@@ -139,7 +147,7 @@ export function RichTextEditor({ name, defaultHTML = "" }: { name: string; defau
     <div className="rounded-md border border-border bg-card">
       {editor && <Toolbar editor={editor} />}
       <EditorContent editor={editor} />
-      <input type="hidden" name={name} value={html} />
+      {name && <input type="hidden" name={name} value={html} />}
     </div>
   );
 }

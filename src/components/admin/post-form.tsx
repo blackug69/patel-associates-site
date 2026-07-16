@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { useActionState } from "react";
 import Link from "next/link";
 import type { FormState } from "@/app/admin/form-state";
-import { RichTextEditor } from "@/components/admin/rich-text-editor";
+import { PostBodyEditor } from "@/components/admin/post-body-editor";
 import { Button } from "@/components/admin/ui/button";
 import { Input } from "@/components/admin/ui/input";
 import { Label } from "@/components/admin/ui/label";
@@ -64,7 +64,7 @@ export function PostForm({ action, defaults = {} }: { action: Action; defaults?:
             <Textarea name="excerpt" defaultValue={defaults.excerpt} className="min-h-20" required />
           </Field>
           <Field label="Body" required>
-            <RichTextEditor name="body" defaultHTML={defaults.body} />
+            <PostBodyEditor name="body" defaultHTML={defaults.body} />
           </Field>
         </CardContent>
       </Card>
