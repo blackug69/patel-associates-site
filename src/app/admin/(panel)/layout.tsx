@@ -42,7 +42,7 @@ export default async function PanelLayout({
 
   return (
     <div className="admin-root flex min-h-dvh">
-      <aside className="hidden w-64 shrink-0 border-r border-border bg-card md:block">
+      <aside className="hidden w-64 shrink-0 border-r border-border bg-card md:block md:sticky md:top-0 md:h-dvh md:overflow-y-auto">
         {sidebar}
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">

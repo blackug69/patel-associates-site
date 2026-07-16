@@ -144,6 +144,10 @@ html[data-admin-theme="light"] {
 }
 .admin-root a { text-decoration: none; }
 .admin-root button { font-family: inherit; cursor: pointer; appearance: none; -webkit-appearance: none; }
+/* No Preflight reset: form controls don't inherit color/font from the UA
+   stylesheet, so their text would render UA-default black on the dark panel.
+   Force inheritance (font-size stays with the utility classes). */
+.admin-root :where(input, textarea, select) { color: inherit; font-family: inherit; }
 /* Theme-toggle icon/label visibility (CSS-driven; no hydration mismatch). */
 .admin-when-light { display: none; }
 html[data-admin-theme="light"] .admin-when-dark { display: none; }
