@@ -31,8 +31,9 @@ export function AdminThemeToggle() {
   }
 
   return (
-    <Button variant="ghost" size="icon" onClick={toggle} suppressHydrationWarning aria-label="Toggle theme" title="Toggle light / dark">
+    <Button variant="outline" size="sm" onClick={toggle} suppressHydrationWarning aria-label="Toggle theme" title="Toggle light / dark" className="gap-2">
       {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      <span className="text-xs">{theme === "dark" ? "Light" : "Dark"}</span>
     </Button>
   );
 }
