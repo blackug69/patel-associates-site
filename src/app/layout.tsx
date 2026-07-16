@@ -47,7 +47,11 @@ export default function RootLayout({
           {`try{if(localStorage.getItem('patel-admin-theme')==='light')document.documentElement.setAttribute('data-admin-theme','light')}catch(e){}`}
         </Script>
       </head>
-      <body>{children}</body>
+      {/* suppressHydrationWarning: browser extensions (Grammarly, etc.) inject
+          attributes onto <body> before React hydrates, which would otherwise
+          log a hydration-mismatch warning. This suppresses only <body>'s own
+          attribute diff, not its children. */}
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }
