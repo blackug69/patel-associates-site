@@ -5,9 +5,9 @@ export const dynamic = "force-dynamic";
 
 export default function NewPostPage() {
   return (
-    <>
-      <h1 className="admin__title">New post</h1>
+    <div className="flex flex-col gap-6">
+      <h1 className="text-2xl font-semibold tracking-tight">New post</h1>
       <PostForm action={createPost} />
-    </>
+    </div>
   );
 }

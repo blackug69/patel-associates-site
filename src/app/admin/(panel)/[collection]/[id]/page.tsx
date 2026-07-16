@@ -19,9 +19,9 @@ export default async function EditCollectionItemPage(
   if (!data) notFound();
 
   return (
-    <>
-      <h1 className="admin__title">Edit {coll.singular.toLowerCase()}</h1>
+    <div className="flex flex-col gap-6">
+      <h1 className="text-2xl font-semibold tracking-tight">Edit {coll.singular.toLowerCase()}</h1>
       <CollectionForm collection={coll} action={saveCollection} defaults={data as Record<string, unknown>} />
-    </>
+    </div>
   );
 }

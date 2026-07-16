@@ -2,6 +2,10 @@
 
 import { useActionState } from "react";
 import { login, type LoginState } from "../actions";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/admin/ui/card";
+import { Input } from "@/components/admin/ui/input";
+import { Label } from "@/components/admin/ui/label";
+import { Button } from "@/components/admin/ui/button";
 
 export default function AdminLoginPage() {
   const [state, formAction, pending] = useActionState<LoginState, FormData>(
@@ -10,29 +14,34 @@ export default function AdminLoginPage() {
   );
 
   return (
-    <main className="admin-auth">
-      <form action={formAction} className="admin-auth__card">
-        <p className="admin-auth__brand">PATEL · Admin</p>
-        <h1 className="admin-auth__title">Sign in</h1>
-        <p className="admin-auth__sub">Manage content, team, and leads.</p>
-
-        <label className="admin-field">
-          <span>Email</span>
-          <input name="email" type="email" autoComplete="email" required />
-        </label>
-        <label className="admin-field">
-          <span>Password</span>
-          <input name="password" type="password" autoComplete="current-password" required />
-        </label>
-
-        {state?.error && (
-          <p className="admin-error" role="alert">{state.error}</p>
-        )}
-
-        <button type="submit" className="admin-btn" disabled={pending}>
-          {pending ? "Signing in…" : "Sign in"}
-        </button>
-      </form>
-    </main>
+    <div className="admin-root flex min-h-dvh items-center justify-center p-6">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <p className="font-mono text-xs uppercase tracking-[0.16em] text-brass">Patel · Admin</p>
+          <CardTitle className="text-2xl">Sign in</CardTitle>
+          <CardDescription>Manage content, team, and leads.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action={formAction} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" name="email" type="email" autoComplete="email" required />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" name="password" type="password" autoComplete="current-password" required />
+            </div>
+            {state?.error && (
+              <p role="alert" className="rounded-md bg-destructive/15 px-3 py-2 text-sm text-destructive-foreground">
+                {state.error}
+              </p>
+            )}
+            <Button type="submit" disabled={pending} className="w-full">
+              {pending ? "Signing in…" : "Sign in"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

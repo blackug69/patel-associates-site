@@ -13,9 +13,9 @@ export default async function NewCollectionItemPage(
   if (!coll) notFound();
 
   return (
-    <>
-      <h1 className="admin__title">New {coll.singular.toLowerCase()}</h1>
+    <div className="flex flex-col gap-6">
+      <h1 className="text-2xl font-semibold tracking-tight">New {coll.singular.toLowerCase()}</h1>
       <CollectionForm collection={coll} action={saveCollection} />
-    </>
+    </div>
   );
 }
