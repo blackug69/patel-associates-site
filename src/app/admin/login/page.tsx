@@ -6,7 +6,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Input } from "@/components/admin/ui/input";
 import { Label } from "@/components/admin/ui/label";
 import { Button } from "@/components/admin/ui/button";
-import { AdminThemeScript } from "@/components/admin/theme-toggle";
 
 export default function AdminLoginPage() {
   const [state, formAction, pending] = useActionState<LoginState, FormData>(
@@ -16,7 +15,6 @@ export default function AdminLoginPage() {
 
   return (
     <div className="admin-root flex min-h-dvh items-center justify-center p-6">
-      <AdminThemeScript />
       <Card className="w-full max-w-sm">
         <CardHeader>
           <p className="font-mono text-xs uppercase tracking-[0.16em] text-brass">Patel · Admin</p>

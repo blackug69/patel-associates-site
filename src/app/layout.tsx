@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { SITE_URL, FIRM } from "@/lib/site";
 
@@ -38,7 +39,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-theme="light">
+    <html lang="en" data-theme="light" suppressHydrationWarning>
+      <head>
+        {/* Applies the saved admin theme before paint (no flash). beforeInteractive
+            avoids the "script in component" warning and never re-runs on client nav. */}
+        <Script id="admin-theme-init" strategy="beforeInteractive">
+          {`try{if(localStorage.getItem('patel-admin-theme')==='light')document.documentElement.setAttribute('data-admin-theme','light')}catch(e){}`}
+        </Script>
+      </head>
       <body>{children}</body>
     </html>
   );

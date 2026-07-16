@@ -107,7 +107,7 @@
   --color-muted: var(--ad-muted);
   --color-muted-foreground: var(--ad-muted-fg);
   --color-accent: var(--ad-accent);
-  --color-accent-foreground: var(--ad-fg);
+  --color-accent-foreground: var(--ad-accent-fg);
   --color-primary: var(--ad-primary);
   --color-primary-foreground: var(--ad-primary-fg);
   --color-secondary: var(--ad-secondary);
@@ -121,44 +121,33 @@
   --color-success: var(--ad-success);
 }
 
-.admin-root {
-  --ad-bg: #0a0a0b;
-  --ad-fg: #f4f4f5;
-  --ad-card: #131316;
-  --ad-popover: #18181b;
-  --ad-muted: #1c1c20;
-  --ad-muted-fg: #a1a1aa;
-  --ad-accent: #26262c;
-  --ad-primary: #f4f4f5;
-  --ad-primary-fg: #18181b;
-  --ad-secondary: #26262c;
-  --ad-border: #27272a;
-  --ad-input: #2a2a30;
-  --ad-ring: #6b6b76;
-  --ad-destructive: #b91c1c;
-  --ad-destructive-fg: #fef2f2;
-  --ad-brass: #c79a54;
-  --ad-success: #4ade80;
-
-  background: var(--ad-bg);
-  color: var(--ad-fg);
-  font-family: var(--sans);
-  min-height: 100dvh;
-  -webkit-font-smoothing: antialiased;
+/* Admin theme vars on :root (NOT .admin-root) so Radix portals
+   (dropdown/select/dialog/sheet/tooltip content on document.body, OUTSIDE
+   .admin-root) resolve them. Public site never uses these utilities. */
+:root {
+  --ad-bg: #0a0a0b; --ad-fg: #f4f4f5; --ad-card: #131316; --ad-popover: #18181b;
+  --ad-muted: #1c1c20; --ad-muted-fg: #a1a1aa; --ad-accent: #26262c; --ad-accent-fg: #f4f4f5;
+  --ad-primary: #f4f4f5; --ad-primary-fg: #18181b; --ad-secondary: #26262c;
+  --ad-border: #27272a; --ad-input: #2a2a30; --ad-ring: #8a8a96;
+  --ad-destructive: #ef4444; --ad-destructive-fg: #fef2f2; --ad-brass: #c79a54; --ad-success: #4ade80;
 }
-html[data-admin-theme="light"] .admin-root {
-  --ad-bg: #f5f2ea; --ad-fg: #14120e;
-  --ad-card: #ffffff; --ad-popover: #ffffff;
-  --ad-muted: #efece3; --ad-muted-fg: #6b655b;
-  --ad-accent: #eee9df;
-  --ad-primary: #14120e; --ad-primary-fg: #f7f4ec;
-  --ad-secondary: #eee9df;
+html[data-admin-theme="light"] {
+  --ad-bg: #f5f2ea; --ad-fg: #14120e; --ad-card: #ffffff; --ad-popover: #ffffff;
+  --ad-muted: #efece3; --ad-muted-fg: #6b655b; --ad-accent: #eee9df; --ad-accent-fg: #14120e;
+  --ad-primary: #14120e; --ad-primary-fg: #f7f4ec; --ad-secondary: #eee9df;
   --ad-border: #e3ded3; --ad-input: #ffffff; --ad-ring: #a9854a;
-  --ad-destructive: #b91c1c; --ad-destructive-fg: #ffffff;
-  --ad-brass: #9a7638; --ad-success: #15803d;
+  --ad-destructive: #dc2626; --ad-destructive-fg: #ffffff; --ad-brass: #9a7638; --ad-success: #15803d;
+}
+.admin-root {
+  background: var(--ad-bg); color: var(--ad-fg); font-family: var(--sans);
+  min-height: 100dvh; -webkit-font-smoothing: antialiased;
 }
 .admin-root a { text-decoration: none; }
 .admin-root button { font-family: inherit; cursor: pointer; appearance: none; -webkit-appearance: none; }
+/* Theme-toggle icon/label visibility (CSS-driven; no hydration mismatch). */
+.admin-when-light { display: none; }
+html[data-admin-theme="light"] .admin-when-dark { display: none; }
+html[data-admin-theme="light"] .admin-when-light { display: inline-flex; }
 .section { padding-block: var(--section-y); border-bottom: 1px solid var(--line); }
 #home.section { padding-block: clamp(32px, 4vw, 56px) var(--section-y); }
 

@@ -1,45 +1,35 @@
 "use client";
 
-import * as React from "react";
 import { Sun, Moon } from "lucide-react";
 import { Button } from "@/components/admin/ui/button";
 
 const KEY = "patel-admin-theme";
 
-function apply(theme: "dark" | "light") {
-  if (theme === "light") document.documentElement.setAttribute("data-admin-theme", "light");
-  else document.documentElement.removeAttribute("data-admin-theme");
-}
-
+// CSS-driven toggle: no React state, so server and client render identical
+// markup (no hydration mismatch). AdminThemeScript sets the html attribute
+// before paint; CSS (.admin-when-dark / .admin-when-light) shows the right
+// icon+label. onClick just flips the attribute + persists it.
 export function AdminThemeToggle() {
-  // AdminThemeScript sets the attribute before hydration, so we read the
-  // already-applied value here (no effect / no setState-in-effect).
-  const [theme, setTheme] = React.useState<"dark" | "light">(() =>
-    typeof document !== "undefined" &&
-    document.documentElement.getAttribute("data-admin-theme") === "light"
-      ? "light"
-      : "dark",
-  );
-
   function toggle() {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    apply(next);
+    const isLight = document.documentElement.getAttribute("data-admin-theme") === "light";
+    const next = isLight ? "dark" : "light";
+    if (next === "light") document.documentElement.setAttribute("data-admin-theme", "light");
+    else document.documentElement.removeAttribute("data-admin-theme");
     try {
       localStorage.setItem(KEY, next);
     } catch {}
   }
 
   return (
-    <Button variant="outline" size="sm" onClick={toggle} suppressHydrationWarning aria-label="Toggle theme" title="Toggle light / dark" className="gap-2">
-      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-      <span className="text-xs">{theme === "dark" ? "Light" : "Dark"}</span>
+    <Button variant="outline" size="sm" onClick={toggle} className="gap-2" aria-label="Toggle light or dark theme" title="Toggle light / dark">
+      <span className="admin-when-dark inline-flex items-center gap-2">
+        <Sun className="h-4 w-4" />
+        <span className="text-xs">Light</span>
+      </span>
+      <span className="admin-when-light inline-flex items-center gap-2">
+        <Moon className="h-4 w-4" />
+        <span className="text-xs">Dark</span>
+      </span>
     </Button>
   );
-}
-
-// Runs before paint to avoid a flash of the wrong theme (static, hardcoded).
-export function AdminThemeScript() {
-  const js = `try{if(localStorage.getItem('${KEY}')==='light')document.documentElement.setAttribute('data-admin-theme','light')}catch(e){}`;
-  return <script dangerouslySetInnerHTML={{ __html: js }} />;
 }
