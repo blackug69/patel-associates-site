@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Trash2 } from "lucide-react";
-import { DataTable, SortableHeader } from "@/components/admin/ui/data-table";
+import { DataTable, SortableHeader, facetFilterFn } from "@/components/admin/ui/data-table";
 import { Badge } from "@/components/admin/ui/badge";
 import { Button } from "@/components/admin/ui/button";
 import {
@@ -61,11 +61,13 @@ const columns: ColumnDef<PostRow>[] = [
   {
     accessorKey: "category",
     header: "Category",
+    filterFn: facetFilterFn,
     cell: ({ row }) => <Badge variant="outline">{row.original.category}</Badge>,
   },
   {
     accessorKey: "published",
     header: "Status",
+    filterFn: facetFilterFn,
     cell: ({ row }) => <Badge variant={row.original.published ? "success" : "secondary"}>{row.original.published ? "Published" : "Draft"}</Badge>,
   },
   {
@@ -80,5 +82,17 @@ const columns: ColumnDef<PostRow>[] = [
 ];
 
 export function PostsTable({ posts }: { posts: PostRow[] }) {
-  return <DataTable columns={columns} data={posts} searchKey="title" searchPlaceholder="Search posts…" />;
+  const categories = Array.from(new Set(posts.map((p) => p.category))).sort();
+  return (
+    <DataTable
+      columns={columns}
+      data={posts}
+      searchKey="title"
+      searchPlaceholder="Search posts…"
+      filters={[
+        { columnId: "category", title: "Category", options: categories.map((c) => ({ label: c, value: c })) },
+        { columnId: "published", title: "Status", options: [{ label: "Published", value: "true" }, { label: "Draft", value: "false" }] },
+      ]}
+    />
+  );
 }

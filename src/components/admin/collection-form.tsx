@@ -9,6 +9,7 @@ import { Input } from "@/components/admin/ui/input";
 import { Label } from "@/components/admin/ui/label";
 import { Textarea } from "@/components/admin/ui/textarea";
 import { Card, CardContent } from "@/components/admin/ui/card";
+import { ImageUpload } from "@/components/admin/image-upload";
 
 type Row = Record<string, unknown>;
 type Action = (prev: FormState, fd: FormData) => Promise<FormState>;
@@ -55,7 +56,9 @@ export function CollectionForm({ collection, action, defaults }: { collection: C
             return (
               <div key={f.name} className="flex flex-col gap-2">
                 <Label>{f.label}{f.required ? " *" : ""}</Label>
-                {isArea(f.type) ? (
+                {f.type === "image" ? (
+                  <ImageUpload name={f.name} defaultUrl={typeof d[f.name] === "string" ? (d[f.name] as string) : ""} folder={collection.key} />
+                ) : isArea(f.type) ? (
                   <Textarea name={f.name} defaultValue={serialize(f, d[f.name])} required={f.required} className="min-h-24" />
                 ) : (
                   <Input

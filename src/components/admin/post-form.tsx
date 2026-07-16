@@ -4,12 +4,13 @@ import type { ReactNode } from "react";
 import { useActionState } from "react";
 import Link from "next/link";
 import type { FormState } from "@/app/admin/form-state";
-import { RichTextEditor } from "@/components/admin/rich-text-editor";
+import { PostBodyEditor } from "@/components/admin/post-body-editor";
 import { Button } from "@/components/admin/ui/button";
 import { Input } from "@/components/admin/ui/input";
 import { Label } from "@/components/admin/ui/label";
 import { Textarea } from "@/components/admin/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/admin/ui/card";
+import { ImageUpload } from "@/components/admin/image-upload";
 
 export type PostDefaults = {
   id?: string;
@@ -63,7 +64,7 @@ export function PostForm({ action, defaults = {} }: { action: Action; defaults?:
             <Textarea name="excerpt" defaultValue={defaults.excerpt} className="min-h-20" required />
           </Field>
           <Field label="Body" required>
-            <RichTextEditor name="body" defaultHTML={defaults.body} />
+            <PostBodyEditor name="body" defaultHTML={defaults.body} />
           </Field>
         </CardContent>
       </Card>
@@ -79,8 +80,8 @@ export function PostForm({ action, defaults = {} }: { action: Action; defaults?:
             <Field label="Published date">
               <Input type="date" name="published_at" defaultValue={dateVal(defaults.published_at)} />
             </Field>
-            <Field label="Cover image URL">
-              <Input name="cover_url" defaultValue={defaults.cover_url ?? ""} placeholder="https://…" />
+            <Field label="Cover image">
+              <ImageUpload name="cover_url" defaultUrl={defaults.cover_url ?? ""} folder="posts" />
             </Field>
           </div>
           <Field label="SEO title">

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Eye, Trash2 } from "lucide-react";
-import { DataTable, SortableHeader } from "@/components/admin/ui/data-table";
+import { DataTable, SortableHeader, facetFilterFn } from "@/components/admin/ui/data-table";
 import { Button } from "@/components/admin/ui/button";
 import {
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
@@ -165,6 +165,7 @@ const columns: ColumnDef<Lead>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    filterFn: facetFilterFn,
     cell: ({ row }) => <StatusSelect id={row.original.id} status={row.original.status} />,
   },
   {
@@ -174,5 +175,23 @@ const columns: ColumnDef<Lead>[] = [
 ];
 
 export function LeadsTable({ leads }: { leads: Lead[] }) {
-  return <DataTable columns={columns} data={leads} searchKey="name" searchPlaceholder="Search by name…" />;
+  return (
+    <DataTable
+      columns={columns}
+      data={leads}
+      searchKey="name"
+      searchPlaceholder="Search by name…"
+      filters={[
+        {
+          columnId: "status",
+          title: "Status",
+          options: [
+            { label: "New", value: "new" },
+            { label: "Contacted", value: "contacted" },
+            { label: "Closed", value: "closed" },
+          ],
+        },
+      ]}
+    />
+  );
 }

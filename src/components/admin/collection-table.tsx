@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Trash2 } from "lucide-react";
-import { DataTable } from "@/components/admin/ui/data-table";
+import { DataTable, facetFilterFn } from "@/components/admin/ui/data-table";
 import { Badge } from "@/components/admin/ui/badge";
 import { Button } from "@/components/admin/ui/button";
 import {
@@ -65,12 +65,20 @@ export function CollectionTable({ collection, rows }: { collection: Collection; 
       (c): ColumnDef<Row> => ({
         accessorKey: c,
         header: c.replace(/_/g, " ").replace(/\b\w/g, (m) => m.toUpperCase()),
+        ...(c === "published" ? { filterFn: facetFilterFn } : {}),
         cell: ({ row }) => <span>{renderCell(row.original[c], c)}</span>,
       }),
     ),
     { id: "actions", cell: ({ row }) => <RowActions collectionKey={collection.key} id={String(row.original.id)} /> },
   ];
+  const hasPublished = collection.listColumns.includes("published");
   return (
-    <DataTable columns={columns} data={rows} searchKey={collection.listColumns[0]} searchPlaceholder="Search…" />
+    <DataTable
+      columns={columns}
+      data={rows}
+      searchKey={collection.listColumns[0]}
+      searchPlaceholder="Search…"
+      filters={hasPublished ? [{ columnId: "published", title: "Status", options: [{ label: "Published", value: "true" }, { label: "Draft", value: "false" }] }] : []}
+    />
   );
 }

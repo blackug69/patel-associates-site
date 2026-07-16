@@ -11,6 +11,7 @@ import {
   HelpCircle,
   Briefcase,
   Trophy,
+  Settings,
   type LucideIcon,
 } from "lucide-react";
 
@@ -25,6 +26,7 @@ const NAV: { href: string; label: string; icon: LucideIcon }[] = [
   { href: "/admin/faqs", label: "FAQs", icon: HelpCircle },
   { href: "/admin/services", label: "Services", icon: Briefcase },
   { href: "/admin/case-studies", label: "Results", icon: Trophy },
+  { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 export function AdminNav({ onNavigate }: { onNavigate?: () => void }) {

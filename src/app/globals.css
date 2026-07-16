@@ -146,6 +146,17 @@
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
 }
+html[data-admin-theme="light"] .admin-root {
+  --ad-bg: #f5f2ea; --ad-fg: #14120e;
+  --ad-card: #ffffff; --ad-popover: #ffffff;
+  --ad-muted: #efece3; --ad-muted-fg: #6b655b;
+  --ad-accent: #eee9df;
+  --ad-primary: #14120e; --ad-primary-fg: #f7f4ec;
+  --ad-secondary: #eee9df;
+  --ad-border: #e3ded3; --ad-input: #ffffff; --ad-ring: #a9854a;
+  --ad-destructive: #b91c1c; --ad-destructive-fg: #ffffff;
+  --ad-brass: #9a7638; --ad-success: #15803d;
+}
 .admin-root a { text-decoration: none; }
 .admin-root button { font-family: inherit; cursor: pointer; appearance: none; -webkit-appearance: none; }
 .section { padding-block: var(--section-y); border-bottom: 1px solid var(--line); }
