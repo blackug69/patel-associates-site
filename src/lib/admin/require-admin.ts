@@ -5,9 +5,9 @@ import { createClient } from "@/lib/supabase/server";
 // proxy/middleware does NOT protect Server Actions invoked directly, so this is
 // the real boundary (alongside RLS).
 //
-// Today it enforces "must be an authenticated user". After docs/admin-hardening.sql
-// is applied (adds the `admins` allowlist + is_admin()), uncomment the is_admin
-// check below to enforce the allowlist as well (defense-in-depth).
+// Enforces authenticated AND membership in the `admins` allowlist (via the
+// is_admin() SQL function from docs/admin-hardening.sql), so it matches the
+// DB-level RLS. This is the real boundary — the proxy does not protect actions.
 export async function requireAdmin() {
   const supabase = await createClient();
   const {
@@ -15,8 +15,10 @@ export async function requireAdmin() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/admin/login");
 
-  // const { data: isAdmin } = await supabase.rpc("is_admin");
-  // if (!isAdmin) redirect("/admin/login");
+  // is_admin() isn't in the generated types; cast at this trusted boundary.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: isAdmin } = await (supabase as any).rpc("is_admin");
+  if (!isAdmin) redirect("/admin/login");
 
   return user;
 }
