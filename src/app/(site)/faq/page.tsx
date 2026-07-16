@@ -1,15 +1,14 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getFaqs, groupFaqs } from "@/lib/content";
 import { JsonLd } from "@/components/json-ld";
+import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "FAQ",
-  description:
-    "Answers to common questions about GST, income tax, accounting, registration, and working with us.",
-  alternates: { canonical: "/faq" },
-};
+export const metadata = pageMeta(
+  "FAQ",
+  "Answers to common questions about GST, income tax, accounting, registration, and working with us.",
+  "/faq",
+);
 
 export const revalidate = 3600;
 

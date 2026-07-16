@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createPublicClient } from "@/lib/supabase/public";
 
 export type Testimonial = {
@@ -31,6 +32,7 @@ export type Post = {
   body: string;
   cover_url: string | null;
   published_at: string | null;
+  updated_at: string | null;
   seo_title: string | null;
   seo_description: string | null;
 };
@@ -69,7 +71,7 @@ export async function getCaseStudies(): Promise<CaseStudy[]> {
 }
 
 const POST_COLUMNS =
-  "slug,title,category,excerpt,body,cover_url,published_at,seo_title,seo_description";
+  "slug,title,category,excerpt,body,cover_url,published_at,updated_at,seo_title,seo_description";
 
 export async function getPosts(): Promise<Post[]> {
   const supabase = createPublicClient();
@@ -82,7 +84,9 @@ export async function getPosts(): Promise<Post[]> {
   return data ?? [];
 }
 
-export async function getPost(slug: string): Promise<Post | undefined> {
+// cache(): metadata + the page component both call getPost(slug) in the same
+// render; React request-dedupes so it's a single Supabase round trip.
+export const getPost = cache(async (slug: string): Promise<Post | undefined> => {
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("posts")
@@ -92,7 +96,7 @@ export async function getPost(slug: string): Promise<Post | undefined> {
     .maybeSingle();
   if (error) throw new Error(`Failed to load post "${slug}": ${error.message}`);
   return data ?? undefined;
-}
+});
 
 // Formats an ISO date as e.g. "15 June 2026". Empty string for null.
 export function formatDate(iso: string | null): string {

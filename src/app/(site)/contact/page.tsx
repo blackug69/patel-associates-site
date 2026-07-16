@@ -1,11 +1,12 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { PatelContactForm } from "@/components/patel-contact-form";
+import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: "Contact Patel Accounting & Legal Services, Ahmedabad. Call, WhatsApp, email, or send an enquiry.",
-};
+export const metadata = pageMeta(
+  "Contact",
+  "Contact Patel Accounting & Legal Services, Ahmedabad. Call, WhatsApp, email, or send an enquiry.",
+  "/contact",
+);
 
 export default function ContactPage() {
   return (

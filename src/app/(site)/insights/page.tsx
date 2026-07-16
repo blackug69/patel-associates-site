@@ -1,14 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getPosts, formatDate } from "@/lib/content";
+import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Insights",
-  description:
-    "Practical notes on GST, income tax, accounting, and business compliance from the Patel team.",
-  alternates: { canonical: "/insights" },
-};
+export const metadata = pageMeta(
+  "Insights",
+  "Practical notes on GST, income tax, accounting, and business compliance from the Patel team.",
+  "/insights",
+);
 
 export const revalidate = 3600;
 

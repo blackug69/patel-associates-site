@@ -442,10 +442,16 @@ html[data-admin-theme="light"] .admin-when-light { display: inline-flex; }
 .footer__nap { font-size: 0.92rem; line-height: 1.7; font-style: normal; }
 .footer__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--s3); padding-top: var(--s5); font-size: 0.82rem; }
 
-/* MOTION */
+/* MOTION — reveal-on-scroll. Gated on `.js` (set before paint by the inline
+   script in layout.tsx) so no-JS users see all content unanimated; and
+   hero / page-hero content is never hidden — it's the above-the-fold LCP
+   element and must paint immediately from SSR HTML, not wait for hydration to
+   add `.is-in`. :where() keeps 0 specificity so the un-hide rule ties then wins
+   by order over `.js .reveal`. */
 @media (prefers-reduced-motion: no-preference) {
-  .reveal { opacity: 0; transform: translateY(16px); }
-  .reveal.is-in { opacity: 1; transform: none; transition: opacity 550ms var(--ease), transform 550ms var(--ease); }
+  .js .reveal { opacity: 0; transform: translateY(16px); }
+  .js .reveal.is-in { opacity: 1; transform: none; transition: opacity 550ms var(--ease), transform 550ms var(--ease); }
+  .js :where(.hero__grid, .page-hero) .reveal { opacity: 1; transform: none; }
 }
 
 /* RESPONSIVE */

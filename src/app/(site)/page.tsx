@@ -76,7 +76,7 @@ export default async function Home() {
           </div>
           <div className="frame hero__media reveal">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/hero-justice.jpg" alt="Classical stone relief of Justice holding scales and a sword" width={1476} height={2040} />
+            <img src="/images/hero-justice.jpg" alt="Classical stone relief of Justice holding scales and a sword" width={1476} height={2040} fetchPriority="high" decoding="async" />
           </div>
         </div>
       </section>
@@ -86,7 +86,7 @@ export default async function Home() {
         <div className="container about__grid">
           <div className="frame about__media reveal">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/contact-office.jpg" alt="Adviser at a desk beside brass scales of justice" width={1400} height={2100} />
+            <img src="/images/contact-office.jpg" alt="Adviser at a desk beside brass scales of justice" width={1400} height={2100} loading="lazy" decoding="async" />
           </div>
           <div className="about reveal">
             <p className="eyebrow">Our story</p>

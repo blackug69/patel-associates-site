@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PostBody } from "@/components/admin/post-body";
 import { getPosts, getPost, formatDate } from "@/lib/content";
 import { JsonLd } from "@/components/json-ld";
-import { SITE_URL, FIRM } from "@/lib/site";
+import { SITE_URL, FIRM, OG_IMAGE } from "@/lib/site";
 
 export const revalidate = 3600;
 
@@ -27,12 +27,17 @@ export async function generateMetadata(
     alternates: { canonical: `/insights/${post.slug}` },
     openGraph: {
       type: "article",
+      locale: "en_IN",
+      siteName: FIRM.name,
       title: post.title,
       description: post.excerpt,
       url: `/insights/${post.slug}`,
       publishedTime: post.published_at ?? undefined,
-      images: post.cover_url ? [post.cover_url] : undefined,
+      modifiedTime: post.updated_at ?? post.published_at ?? undefined,
+      // Falls back to the branded default OG image when the post has no cover.
+      images: [post.cover_url ?? OG_IMAGE],
     },
+    twitter: { card: "summary_large_image", title: post.title, description: post.excerpt, images: [post.cover_url ?? OG_IMAGE] },
   };
 }
 
@@ -50,15 +55,26 @@ export default async function InsightPage(
     description: post.excerpt,
     articleSection: post.category,
     datePublished: post.published_at ?? undefined,
-    image: post.cover_url ?? undefined,
+    dateModified: post.updated_at ?? post.published_at ?? undefined,
+    image: post.cover_url ?? `${SITE_URL}/opengraph-image`,
     author: { "@type": "Organization", name: FIRM.name },
     publisher: { "@type": "Organization", name: FIRM.name, "@id": `${SITE_URL}/#business` },
     mainEntityOfPage: `${SITE_URL}/insights/${post.slug}`,
+  };
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Insights", item: `${SITE_URL}/insights` },
+      { "@type": "ListItem", position: 3, name: post.title, item: `${SITE_URL}/insights/${post.slug}` },
+    ],
   };
 
   return (
     <main>
       <JsonLd data={articleSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <section className="page-hero">
         <div className="container">
           <p className="breadcrumb reveal"><Link href="/">Home</Link> / <Link href="/insights">Insights</Link> / {post.title}</p>

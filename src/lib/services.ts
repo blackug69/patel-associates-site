@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createPublicClient } from "@/lib/supabase/public";
 import type { Json } from "@/lib/supabase/types";
 
@@ -49,7 +50,9 @@ export async function getServices(): Promise<Service[]> {
   return (data ?? []).map(mapRow);
 }
 
-export async function getService(slug: string): Promise<Service | undefined> {
+// cache(): generateMetadata + the page component both call getService(slug) in
+// the same render; React request-dedupes so it's a single Supabase round trip.
+export const getService = cache(async (slug: string): Promise<Service | undefined> => {
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("services")
@@ -59,4 +62,4 @@ export async function getService(slug: string): Promise<Service | undefined> {
     .maybeSingle();
   if (error) throw new Error(`Failed to load service "${slug}": ${error.message}`);
   return data ? mapRow(data) : undefined;
-}
+});

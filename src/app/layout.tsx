@@ -39,12 +39,12 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-theme="light" suppressHydrationWarning>
+    <html lang="en-IN" data-theme="light" suppressHydrationWarning>
       <head>
         {/* Applies the saved admin theme before paint (no flash). beforeInteractive
             avoids the "script in component" warning and never re-runs on client nav. */}
         <Script id="admin-theme-init" strategy="beforeInteractive">
-          {`try{if(localStorage.getItem('patel-admin-theme')==='light')document.documentElement.setAttribute('data-admin-theme','light')}catch(e){}`}
+          {`document.documentElement.classList.add('js');try{if(localStorage.getItem('patel-admin-theme')==='light')document.documentElement.setAttribute('data-admin-theme','light')}catch(e){}`}
         </Script>
       </head>
       {/* suppressHydrationWarning: browser extensions (Grammarly, etc.) inject

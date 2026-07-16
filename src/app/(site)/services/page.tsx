@@ -1,15 +1,14 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { getServices } from "@/lib/services";
 import { ServiceIcon } from "@/components/service-icon";
 import { Button } from "@/components/ui/button";
+import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Services",
-  description:
-    "Accounting, GST, income tax, business registration, and legal compliance — everything you need to register, file, and stay compliant, in Ahmedabad.",
-  alternates: { canonical: "/services" },
-};
+export const metadata = pageMeta(
+  "Services",
+  "Accounting, GST, income tax, business registration, and legal compliance — everything you need to register, file, and stay compliant, in Ahmedabad.",
+  "/services",
+);
 
 export const revalidate = 3600;
 

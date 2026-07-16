@@ -1,14 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getCaseStudies } from "@/lib/content";
+import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Results",
-  description:
-    "Representative outcomes from our accounting, tax, GST, and registration work for individuals and businesses.",
-  alternates: { canonical: "/results" },
-};
+export const metadata = pageMeta(
+  "Results",
+  "Representative outcomes from our accounting, tax, GST, and registration work for individuals and businesses.",
+  "/results",
+);
 
 export const revalidate = 3600;
 

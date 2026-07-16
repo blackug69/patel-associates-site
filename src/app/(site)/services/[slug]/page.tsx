@@ -5,7 +5,7 @@ import { getServices, getService } from "@/lib/services";
 import { ServiceIcon } from "@/components/service-icon";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/json-ld";
-import { SITE_URL, FIRM } from "@/lib/site";
+import { SITE_URL, FIRM, OG_IMAGE } from "@/lib/site";
 
 export const revalidate = 3600;
 
@@ -22,15 +22,21 @@ export async function generateMetadata(
   if (!service) return {};
   // Local long-tail targeting ("... in Ahmedabad") — the winning pattern for
   // this market. The layout title template appends the firm name.
+  const ogTitle = `${service.title} in Ahmedabad · ${FIRM.name}`;
   return {
     title: `${service.title} in Ahmedabad`,
     description: service.lead,
     alternates: { canonical: `/services/${service.slug}` },
     openGraph: {
-      title: `${service.title} in Ahmedabad · ${FIRM.name}`,
+      type: "website",
+      locale: "en_IN",
+      siteName: FIRM.name,
+      title: ogTitle,
       description: service.lead,
       url: `/services/${service.slug}`,
+      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: FIRM.name }],
     },
+    twitter: { card: "summary_large_image", title: ogTitle, description: service.lead, images: [OG_IMAGE] },
   };
 }
 

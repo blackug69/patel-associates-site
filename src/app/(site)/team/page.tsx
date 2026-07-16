@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getTeam } from "@/lib/team";
+import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Our Team",
-  description: "The people behind Patel Accounting & Legal Services, Ahmedabad.",
-};
+export const metadata = pageMeta(
+  "Our Team",
+  "The people behind Patel Accounting & Legal Services — experienced accountants and advisers in Ahmedabad who work directly with your file.",
+  "/team",
+);
 
 export const revalidate = 3600;
 
@@ -37,7 +38,7 @@ export default async function TeamPage() {
                 <article className="founder reveal" key={m.id}>
                   {m.photo_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img className="founder__photo" src={m.photo_url} alt={`Portrait of ${m.name}`} width={480} height={600} />
+                    <img className="founder__photo" src={m.photo_url} alt={`Portrait of ${m.name}`} width={480} height={600} loading="lazy" decoding="async" />
                   ) : (
                     <div className="photo-ph founder__photo"><span>Portrait</span></div>
                   )}
@@ -65,7 +66,7 @@ export default async function TeamPage() {
                 <article className="member reveal" key={m.id}>
                   {m.photo_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img className="member__photo" src={m.photo_url} alt={`Photo of ${m.name}`} width={360} height={360} />
+                    <img className="member__photo" src={m.photo_url} alt={`Photo of ${m.name}`} width={360} height={360} loading="lazy" decoding="async" />
                   ) : (
                     <div className="photo-ph member__photo"><span>Photo</span></div>
                   )}
