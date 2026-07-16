@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
+import { PostBody } from "@/components/admin/post-body";
 import { getPosts, getPost, formatDate } from "@/lib/content";
 import { JsonLd } from "@/components/json-ld";
 import { SITE_URL, FIRM } from "@/lib/site";
@@ -75,7 +76,9 @@ export default async function InsightPage(
       <section className="section">
         <div className="container">
           <div className="prose reveal">
-            <ReactMarkdown>{post.body}</ReactMarkdown>
+            {post.body.trimStart().startsWith("<")
+              ? <PostBody html={post.body} />
+              : <ReactMarkdown>{post.body}</ReactMarkdown>}
           </div>
         </div>
       </section>

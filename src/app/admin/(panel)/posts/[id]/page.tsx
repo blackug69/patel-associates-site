@@ -10,13 +10,13 @@ export default async function EditPostPage(
 ) {
   const { id } = await params;
   const supabase = await createClient();
-  const { data: post } = await supabase.from("posts").select("*").eq("id", id).maybeSingle();
-  if (!post) notFound();
+  const { data } = await supabase.from("posts").select("*").eq("id", id).maybeSingle();
+  if (!data) notFound();
 
   return (
-    <>
-      <h1 className="admin__title">Edit post</h1>
-      <PostForm action={updatePost} defaults={post} />
-    </>
+    <div className="flex flex-col gap-6">
+      <h1 className="text-2xl font-semibold tracking-tight">Edit post</h1>
+      <PostForm action={updatePost} defaults={data} />
+    </div>
   );
 }

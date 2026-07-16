@@ -146,7 +146,8 @@
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
 }
-.admin-root button { font-family: inherit; cursor: pointer; }
+.admin-root a { text-decoration: none; }
+.admin-root button { font-family: inherit; cursor: pointer; appearance: none; -webkit-appearance: none; }
 .section { padding-block: var(--section-y); border-bottom: 1px solid var(--line); }
 #home.section { padding-block: clamp(32px, 4vw, 56px) var(--section-y); }
 

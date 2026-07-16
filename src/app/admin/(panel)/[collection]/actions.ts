@@ -2,13 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { requireAdmin } from "@/lib/admin/require-admin";
 import { createClient } from "@/lib/supabase/server";
 import { getCollection, type Collection } from "@/lib/admin/collections";
 import type { FormState } from "@/app/admin/form-state";
 
-// Table names come from a trusted config (never user input), so casting past the
-// generated table-literal types at this one boundary is safe and keeps the
-// generic CRUD from exploding into per-table code.
 async function fromTable(table: string) {
   const sb = await createClient();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,13 +16,11 @@ async function fromTable(table: string) {
 function parsePairs(value: string, a: string, b: string) {
   return value
     .split("\n")
-    .map((line) => line.trim())
+    .map((l) => l.trim())
     .filter(Boolean)
-    .map((line) => {
-      const i = line.indexOf("|");
-      const first = i === -1 ? line : line.slice(0, i);
-      const second = i === -1 ? "" : line.slice(i + 1);
-      return { [a]: first.trim(), [b]: second.trim() };
+    .map((l) => {
+      const i = l.indexOf("|");
+      return { [a]: (i === -1 ? l : l.slice(0, i)).trim(), [b]: (i === -1 ? "" : l.slice(i + 1)).trim() };
     });
 }
 
@@ -38,7 +34,7 @@ function buildRow(coll: Collection, fd: FormData): Record<string, unknown> {
     const val = String(fd.get(f.name) ?? "").trim();
     switch (f.type) {
       case "number":
-        if (val !== "") row[f.name] = Number(val); // empty → omit (DB default / unchanged)
+        if (val !== "") row[f.name] = Number(val);
         break;
       case "lines":
         row[f.name] = val === "" ? [] : val.split("\n").map((s) => s.trim()).filter(Boolean);
@@ -49,7 +45,7 @@ function buildRow(coll: Collection, fd: FormData): Record<string, unknown> {
       case "qalines":
         row[f.name] = parsePairs(val, "q", "a");
         break;
-      default: // text / textarea
+      default:
         row[f.name] = val === "" ? (f.required ? "" : null) : val;
     }
   }
@@ -66,11 +62,11 @@ function missingRequired(coll: Collection, row: Record<string, unknown>): string
 }
 
 export async function saveCollection(_prev: FormState, fd: FormData): Promise<FormState> {
+  await requireAdmin();
   const coll = getCollection(String(fd.get("__collection") ?? ""));
   if (!coll) return { error: "Unknown collection." };
   const id = String(fd.get("__id") ?? "");
   const row = buildRow(coll, fd);
-
   const missing = missingRequired(coll, row);
   if (missing) return { error: missing };
 
@@ -88,6 +84,7 @@ export async function saveCollection(_prev: FormState, fd: FormData): Promise<Fo
 }
 
 export async function deleteCollection(fd: FormData) {
+  await requireAdmin();
   const coll = getCollection(String(fd.get("__collection") ?? ""));
   if (!coll) return;
   const id = String(fd.get("__id") ?? "");
@@ -95,7 +92,6 @@ export async function deleteCollection(fd: FormData) {
 
   const q = await fromTable(coll.table);
   await q.delete().eq("id", id);
-
   coll.revalidate.forEach((p) => revalidatePath(p));
   revalidatePath(`/admin/${coll.key}`);
 }

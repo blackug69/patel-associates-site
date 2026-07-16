@@ -1,50 +1,30 @@
 import Link from "next/link";
+import { Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { deletePost } from "./actions";
+import { Button } from "@/components/admin/ui/button";
+import { PostsTable, type PostRow } from "@/components/admin/posts-table";
 
 export const dynamic = "force-dynamic";
 
-export default async function PostsAdminPage() {
+export default async function PostsPage() {
   const supabase = await createClient();
-  const { data: posts } = await supabase
+  const { data } = await supabase
     .from("posts")
-    .select("id,title,category,published,published_at,slug")
-    .order("published_at", { ascending: false });
+    .select("id,title,category,published,updated_at")
+    .order("updated_at", { ascending: false });
 
   return (
-    <>
-      <div className="admin__bar">
-        <h1 className="admin__title">Insights</h1>
-        <Link href="/admin/posts/new" className="admin-btn">New post</Link>
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Insights</h1>
+          <p className="text-sm text-muted-foreground">Your blog articles — drafts and published.</p>
+        </div>
+        <Button asChild>
+          <Link href="/admin/posts/new"><Plus className="h-4 w-4" /> New post</Link>
+        </Button>
       </div>
-
-      {!posts || posts.length === 0 ? (
-        <p>No posts yet. <Link href="/admin/posts/new">Write the first one</Link>.</p>
-      ) : (
-        <table className="admin__table">
-          <thead>
-            <tr><th>Title</th><th>Category</th><th>Status</th><th aria-label="Actions" /></tr>
-          </thead>
-          <tbody>
-            {posts.map((p) => (
-              <tr key={p.id}>
-                <td><Link href={`/admin/posts/${p.id}`}>{p.title}</Link></td>
-                <td>{p.category}</td>
-                <td>{p.published ? "Published" : "Draft"}</td>
-                <td>
-                  <div className="admin__actions">
-                    <Link href={`/admin/posts/${p.id}`} className="admin-btn admin-btn--ghost">Edit</Link>
-                    <form action={deletePost}>
-                      <input type="hidden" name="id" value={p.id} />
-                      <button type="submit" className="admin-btn admin-btn--danger">Delete</button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </>
+      <PostsTable posts={(data ?? []) as PostRow[]} />
+    </div>
   );
 }

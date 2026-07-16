@@ -51,7 +51,7 @@ function ToolButton({
       aria-pressed={active}
       title={label}
       className={cn(
-        "flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground",
+        "flex h-8 w-8 items-center justify-center rounded-md bg-transparent text-muted-foreground",
         "hover:bg-muted hover:text-foreground",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         active && "bg-accent text-accent-foreground",
