@@ -148,6 +148,15 @@ html[data-admin-theme="light"] {
    stylesheet, so their text would render UA-default black on the dark panel.
    Force inheritance (font-size stays with the utility classes). */
 .admin-root :where(input, textarea, select) { color: inherit; font-family: inherit; }
+/* Also without Preflight, <button> keeps the UA 2px outset border (and inputs
+   keep UA borders). Re-baseline to 0-width solid in the `base` layer so the
+   utility `border`/`bg-*` classes still win where a variant asks for one:
+   ghost buttons become truly borderless, outline/input keep their 1px line.
+   :where() = 0 specificity so utilities always override. */
+@layer base {
+  .admin-root :where(button, input, select, textarea) { border: 0 solid var(--ad-border); }
+  .admin-root :where(button) { background-color: transparent; background-image: none; }
+}
 /* Theme-toggle icon/label visibility (CSS-driven; no hydration mismatch). */
 .admin-when-light { display: none; }
 html[data-admin-theme="light"] .admin-when-dark { display: none; }
