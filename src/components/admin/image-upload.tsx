@@ -8,12 +8,14 @@ import { Button } from "@/components/admin/ui/button";
 // Uploads to the public "media" Supabase Storage bucket (see docs/admin-v2.sql)
 // and stores the resulting public URL in a hidden input named `name`, so it
 // submits inside a normal <form>. Requires an authenticated admin session.
-export function ImageUpload({ name, defaultUrl, folder = "uploads" }: {
+export function ImageUpload({ name, defaultUrl, folder = "uploads", onChange }: {
   name: string;
   defaultUrl?: string | null;
   folder?: string;
+  onChange?: (url: string) => void;
 }) {
   const [url, setUrl] = React.useState(defaultUrl ?? "");
+  const setUrlAnd = (u: string) => { setUrl(u); onChange?.(u); };
   const [busy, setBusy] = React.useState(false);
   const [err, setErr] = React.useState("");
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -33,7 +35,7 @@ export function ImageUpload({ name, defaultUrl, folder = "uploads" }: {
       });
       if (error) throw error;
       const { data } = supabase.storage.from("media").getPublicUrl(path);
-      setUrl(data.publicUrl);
+      setUrlAnd(data.publicUrl);
     } catch (e2) {
       setErr(e2 instanceof Error ? e2.message : "Upload failed");
     } finally {
@@ -52,7 +54,7 @@ export function ImageUpload({ name, defaultUrl, folder = "uploads" }: {
           <Button
             type="button" variant="outline" size="icon"
             className="absolute -right-2 -top-2 h-6 w-6 rounded-full"
-            onClick={() => setUrl("")} aria-label="Remove image"
+            onClick={() => setUrlAnd("")} aria-label="Remove image"
           >
             <X className="h-3 w-3" />
           </Button>

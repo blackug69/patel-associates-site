@@ -35,9 +35,12 @@ function ModeBtn({ active, onClick, children }: { active: boolean; onClick: () =
 
 // Body editor with two switchable experiences that share one HTML value:
 // "Rich" (BlockNote, Notion-style) and "Simple" (Tiptap toolbar).
-export function PostBodyEditor({ name, defaultHTML = "" }: { name: string; defaultHTML?: string }) {
+export function PostBodyEditor({ name, defaultHTML = "", onHTMLChange }: { name: string; defaultHTML?: string; onHTMLChange?: (html: string) => void }) {
   const [mode, setMode] = React.useState<"rich" | "simple">("rich");
   const [html, setHtml] = React.useState(defaultHTML);
+  // Mirror every change up so a parent (e.g. the live preview) can react,
+  // while the hidden input below keeps the value inside the <form>.
+  const update = React.useCallback((h: string) => { setHtml(h); onHTMLChange?.(h); }, [onHTMLChange]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -47,9 +50,9 @@ export function PostBodyEditor({ name, defaultHTML = "" }: { name: string; defau
         <ModeBtn active={mode === "simple"} onClick={() => setMode("simple")}>Simple</ModeBtn>
       </div>
       {mode === "rich" ? (
-        <RichBlockEditor defaultHTML={html} onChange={setHtml} />
+        <RichBlockEditor defaultHTML={html} onChange={update} />
       ) : (
-        <RichTextEditor defaultHTML={html} onChange={setHtml} />
+        <RichTextEditor defaultHTML={html} onChange={update} />
       )}
     </div>
   );
