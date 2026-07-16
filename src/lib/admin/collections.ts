@@ -6,6 +6,7 @@ export type FieldType =
   | "textarea"
   | "number"
   | "checkbox"
+  | "image" // Supabase Storage upload → public URL string
   | "lines" // textarea → string[] (one item per line)
   | "kvlines" // textarea → {name, desc}[] ("Name | Description" per line)
   | "qalines"; // textarea → {q, a}[] ("Question | Answer" per line)
@@ -77,7 +78,7 @@ export const COLLECTIONS: Record<string, Collection> = {
       { name: "name", label: "Name", type: "text", required: true },
       { name: "role", label: "Role", type: "text", required: true },
       { name: "bio", label: "Bio", type: "textarea" },
-      { name: "photo_url", label: "Photo URL", type: "text", placeholder: "https://…" },
+      { name: "photo_url", label: "Photo", type: "image" },
       { name: "is_leadership", label: "Leadership (shown as founder)", type: "checkbox" },
       { name: "sort_order", label: "Sort order", type: "number" },
       { name: "published", label: "Published", type: "checkbox", default: true },
