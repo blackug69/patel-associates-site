@@ -4,27 +4,53 @@
 -- Safe to run once; guarded where practical.
 -- =============================================================================
 
--- 1. Public "media" bucket for uploaded images (team photos, blog covers) -------
-insert into storage.buckets (id, name, public)
-values ('media', 'media', true)
-on conflict (id) do nothing;
+-- 0. Admin allowlist + is_admin() (idempotent; also in docs/admin-hardening.sql).
+--    Writes below are gated on membership, so a bare `authenticated` session
+--    (should public sign-ups ever be on) still cannot write.
+create table if not exists public.admins (
+  user_id uuid primary key references auth.users (id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+alter table public.admins enable row level security;
 
--- Public can READ media; only authenticated admins can write.
+create or replace function public.is_admin()
+returns boolean language sql security definer set search_path = '' stable as $$
+  select exists (select 1 from public.admins where user_id = (select auth.uid()));
+$$;
+revoke execute on function public.is_admin() from public, anon;
+grant execute on function public.is_admin() to authenticated;
+
+-- Seed the first admin (edit the email if needed).
+insert into public.admins (user_id)
+select id from auth.users where email = 'qa@admin.com'
+on conflict (user_id) do nothing;
+
+-- 1. Public "media" bucket for uploaded images (team photos, blog covers) -------
+--    Images only, 5 MB cap, and NO svg (SVG can carry script).
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('media', 'media', true, 5242880,
+        array['image/png', 'image/jpeg', 'image/webp', 'image/gif'])
+on conflict (id) do update
+  set public = excluded.public,
+      file_size_limit = excluded.file_size_limit,
+      allowed_mime_types = excluded.allowed_mime_types;
+
+-- Public can READ media; only allow-listed admins can write.
 drop policy if exists "media public read" on storage.objects;
 create policy "media public read" on storage.objects
   for select to anon, authenticated using (bucket_id = 'media');
 
 drop policy if exists "media admin write" on storage.objects;
 create policy "media admin write" on storage.objects
-  for insert to authenticated with check (bucket_id = 'media');
+  for insert to authenticated with check (bucket_id = 'media' and public.is_admin());
 
 drop policy if exists "media admin update" on storage.objects;
 create policy "media admin update" on storage.objects
-  for update to authenticated using (bucket_id = 'media');
+  for update to authenticated using (bucket_id = 'media' and public.is_admin());
 
 drop policy if exists "media admin delete" on storage.objects;
 create policy "media admin delete" on storage.objects
-  for delete to authenticated using (bucket_id = 'media');
+  for delete to authenticated using (bucket_id = 'media' and public.is_admin());
 
 -- 2. Single-row site settings --------------------------------------------------
 create table if not exists public.site_settings (
@@ -52,7 +78,7 @@ create policy site_settings_public_read on public.site_settings
 
 drop policy if exists site_settings_admin_all on public.site_settings;
 create policy site_settings_admin_all on public.site_settings
-  for all to authenticated using (true) with check (true);
+  for all to authenticated using (public.is_admin()) with check (public.is_admin());
 
 insert into public.site_settings (id, firm_name, tagline, phone, alt_phone, email, address, hours)
 values (
