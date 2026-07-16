@@ -43,7 +43,12 @@ export function SiteFooter() {
         </div>
         <div className="footer__bottom">
           <span>© 2026 Patel Accounting &amp; Legal Services.</span>
-          <span>Privacy &middot; Terms</span>
+          <span className="footer__legal">
+            <Link href="/privacy-policy">Privacy</Link> &middot;{" "}
+            <Link href="/terms">Terms</Link> &middot;{" "}
+            <Link href="/cookie-policy">Cookies</Link> &middot;{" "}
+            <Link href="/disclaimer">Disclaimer</Link>
+          </span>
         </div>
       </div>
     </footer>
