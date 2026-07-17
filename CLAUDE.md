@@ -85,6 +85,6 @@ monochrome, no color, no heavy shadows). Consult it before making visual choices
 `src/app/actions.ts` `submitEnquiry` is a `"use server"` Server Action used by
 `patel-contact-form.tsx` via `useActionState`. It validates server-side, has a honeypot
 (`company` field), and sends via Resend **only if `RESEND_API_KEY` is set** — otherwise
-it logs the enquiry with `console.info` so the flow still works locally. (Note:
-`src/components/contact-form.tsx` and `whatsapp-button.tsx` exist but are not currently
-wired into any page.)
+it logs the enquiry with `console.info` so the flow still works locally.
+`whatsapp-button.tsx` IS wired (rendered sitewide in `src/app/(site)/layout.tsx`).
+(Note: `src/components/contact-form.tsx` exists but is not currently wired into any page.)
