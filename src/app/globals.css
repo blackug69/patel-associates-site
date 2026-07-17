@@ -257,8 +257,16 @@ html[data-admin-theme="light"] .admin-when-light { display: inline-flex; }
 .theme-toggle .ic-sun { display: none; }
 :root[data-theme="dark"] .theme-toggle .ic-sun { display: block; }
 :root[data-theme="dark"] .theme-toggle .ic-moon { display: none; }
-.nav__burger { display: none; background: none; border: 0; cursor: pointer; padding: 8px; }
-.nav__burger span { display: block; width: 22px; height: 1.5px; background: var(--ink-900); margin: 5px 0; }
+.nav__burger { display: none; position: relative; width: 44px; height: 44px; background: none; border: 0; cursor: pointer; padding: 0; }
+.nav__burger span { position: absolute; left: 11px; right: 11px; height: 1.5px; background: var(--ink-900); transition: top 200ms var(--ease), transform 200ms var(--ease), opacity 160ms var(--ease); }
+.nav__burger span:nth-child(1) { top: 16px; }
+.nav__burger span:nth-child(2) { top: 21px; }
+.nav__burger span:nth-child(3) { top: 26px; }
+/* Burger morphs to an X when the menu is open: outer bars slide to the middle
+   (top:21px) and rotate ±45°, middle bar fades out. */
+.nav[data-open="true"] .nav__burger span:nth-child(1) { top: 21px; transform: rotate(45deg); }
+.nav[data-open="true"] .nav__burger span:nth-child(2) { opacity: 0; }
+.nav[data-open="true"] .nav__burger span:nth-child(3) { top: 21px; transform: rotate(-45deg); }
 
 /* HERO */
 .hero__grid {
@@ -361,7 +369,10 @@ html[data-admin-theme="light"] .admin-when-light { display: inline-flex; }
 .contact__intro h2 { font-size: clamp(1.9rem, 3.4vw, 2.9rem); line-height: 1.1; margin: 0 0 var(--s4); }
 .contact__lead { color: var(--ink-700); font-size: 1.05rem; max-width: 40ch; margin: 0 0 var(--s6); }
 .contact__details { list-style: none; margin: 0; padding: var(--s5) 0 0; border-top: 1px solid var(--line-2); display: flex; flex-direction: column; gap: var(--s3); }
-.contact__details li { display: flex; gap: var(--s4); font-size: 0.95rem; }
+.contact__details li { display: flex; gap: var(--s4); font-size: 0.95rem; min-width: 0; }
+/* Let the value column shrink and wrap long unbreakable tokens (e.g. the email
+   address) instead of forcing horizontal overflow on narrow screens. */
+.contact__details li > :not(.contact__k) { min-width: 0; overflow-wrap: anywhere; }
 .contact__k { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-500); width: 88px; flex: none; padding-top: 3px; }
 .contact__details a { color: var(--ink-900); text-decoration: none; }
 .contact__details a:hover { text-decoration: underline; }
@@ -475,11 +486,27 @@ html[data-admin-theme="light"] .admin-when-light { display: inline-flex; }
 @media (max-width: 760px) {
   .nav__links, .nav .theme-toggle { display: none; }
   .nav__burger { display: block; }
+  .nav { background: var(--paper-0); }
+  /* Full-height mobile menu sheet, anchored just below the header. Uses
+     position:absolute (relative to the positioned .nav) rather than fixed,
+     because .nav's backdrop-filter would otherwise trap a fixed child inside
+     the header box. min-height:100dvh makes it fill the screen; body scroll is
+     locked while open (see site-nav.tsx) so there's nothing to scroll behind. */
   .nav[data-open="true"] .nav__links {
-    display: flex; position: absolute; left: 0; right: 0; top: 100%;
-    flex-direction: column; gap: var(--s4); background: var(--paper-0);
-    border-bottom: 1px solid var(--line); padding: var(--s5) clamp(20px,4vw,40px);
+    display: flex; position: absolute; top: 100%; left: 0; right: 0; z-index: 30;
+    flex-direction: column; gap: 0;
+    min-height: 100dvh;
+    background: var(--paper-0);
+    border-top: 1px solid var(--line);
+    padding: var(--s3) clamp(20px, 6vw, 40px) var(--s7);
+    overflow-y: auto; overscroll-behavior: contain;
   }
+  .nav[data-open="true"] .nav__links li + li { border-top: 1px solid var(--line); }
+  .nav[data-open="true"] .nav__links a {
+    display: flex; align-items: center; min-height: 52px;
+    font-family: var(--serif); font-size: 1.4rem; color: var(--ink-900);
+  }
+  .nav[data-open="true"] .nav__links a[aria-current="page"] { color: var(--ink-500); }
   .hero__grid { grid-template-columns: 1fr; gap: var(--s7); }
   .hero__media { order: 3; aspect-ratio: 5/4; }
   .services__grid, .process__grid, .quotes, .industries__grid, .why__grid { grid-template-columns: 1fr; }

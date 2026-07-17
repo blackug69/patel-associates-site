@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { Menu, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "../actions";
 import { AdminNav } from "@/components/admin/admin-nav";
+import { AdminMobileNav } from "@/components/admin/admin-mobile-nav";
 import { Toaster } from "@/components/admin/ui/sonner";
 import { Button } from "@/components/admin/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/admin/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/admin/ui/avatar";
 import { AdminThemeToggle } from "@/components/admin/theme-toggle";
 
@@ -47,17 +47,7 @@ export default async function PanelLayout({
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-64 bg-card p-0">
-              <SheetTitle className="sr-only">Navigation</SheetTitle>
-              {sidebar}
-            </SheetContent>
-          </Sheet>
+          <AdminMobileNav>{sidebar}</AdminMobileNav>
           <span className="text-sm font-medium text-muted-foreground">Patel Admin</span>
           <div className="ml-auto"><AdminThemeToggle /></div>
         </header>
