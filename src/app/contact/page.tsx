@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { PatelContactForm } from "@/components/patel-contact-form";
 
 export const metadata: Metadata = {
@@ -12,7 +11,6 @@ export default function ContactPage() {
     <main>
       <section className="page-hero">
         <div className="container">
-          <p className="breadcrumb reveal"><Link href="/">Home</Link> / Contact</p>
           <p className="eyebrow reveal">Contact</p>
           <h1 className="reveal">Need professional assistance?</h1>
           <p className="page-hero__lead reveal">Get in touch to schedule a consultation. We look forward to helping you manage your accounting and taxation with confidence.</p>

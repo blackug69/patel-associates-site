@@ -3,6 +3,16 @@
 import { useActionState } from "react";
 import { submitEnquiry, type ContactState } from "@/app/actions";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const initialState: ContactState = { status: "idle", message: "" };
 
@@ -31,35 +41,41 @@ export function PatelContactForm() {
     <form className="contact-form reveal" action={formAction} noValidate>
       <div className="form-row">
         <div className="field">
-          <label htmlFor="f-name">Name</label>
-          <input id="f-name" name="name" type="text" autoComplete="name" required />
+          <Label htmlFor="f-name">Name</Label>
+          <Input id="f-name" name="name" type="text" autoComplete="name" required />
         </div>
         <div className="field">
-          <label htmlFor="f-phone">Phone</label>
-          <input id="f-phone" name="phone" type="tel" autoComplete="tel" required />
+          <Label htmlFor="f-phone">Phone</Label>
+          <Input id="f-phone" name="phone" type="tel" autoComplete="tel" required />
         </div>
       </div>
       <div className="field">
-        <label htmlFor="f-email">Email <span className="opt">(optional)</span></label>
-        <input id="f-email" name="email" type="email" autoComplete="email" />
+        <Label htmlFor="f-email">Email <span className="opt">(optional)</span></Label>
+        <Input id="f-email" name="email" type="email" autoComplete="email" />
       </div>
       <div className="field">
-        <label htmlFor="f-service">Service</label>
-        <select id="f-service" name="service" defaultValue="">
-          <option value="">Select a service…</option>
-          {SERVICE_OPTIONS.map((o) => (
-            <option key={o}>{o}</option>
-          ))}
-        </select>
+        <Label htmlFor="f-service">Service</Label>
+        <Select name="service">
+          <SelectTrigger id="f-service">
+            <SelectValue placeholder="Select a service…" />
+          </SelectTrigger>
+          <SelectContent>
+            {SERVICE_OPTIONS.map((o) => (
+              <SelectItem key={o} value={o}>
+                {o}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div className="field">
-        <label htmlFor="f-message">Message</label>
-        <textarea id="f-message" name="message" rows={4} required />
+        <Label htmlFor="f-message">Message</Label>
+        <Textarea id="f-message" name="message" rows={4} required />
       </div>
       <div className="hp" aria-hidden>
         <label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label>
       </div>
-      <Button variant="primary" type="submit" disabled={pending}>
+      <Button variant="default" type="submit" disabled={pending}>
         {pending ? "Sending…" : "Send enquiry"}
         {!pending && <span className="arrow" aria-hidden>↗</span>}
       </Button>

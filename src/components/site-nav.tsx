@@ -45,7 +45,7 @@ export function SiteNav() {
           </ul>
         </nav>
         <div className="nav__actions">
-          <Button asChild variant="primary" size="sm">
+          <Button asChild variant="default" size="sm">
             <Link href="/contact">Book a Consultation</Link>
           </Button>
           <button
