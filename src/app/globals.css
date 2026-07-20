@@ -10,6 +10,10 @@
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *, [data-theme="dark"] *));
 
 :root {
   --ink-900: #14120E;
@@ -20,6 +24,8 @@
   --paper-0: #F5F2EA;
   --paper-1: #FAF8F2;
   --white:   #FFFFFF;
+  /* Warm brick — the one non-monochrome hue, reserved for destructive UI. */
+  --danger:  #9A3B2E;
 
   --dark-bg:   #14120E;
   --dark-1:    #211D17;
@@ -36,24 +42,152 @@
   --nav-h: 76px;
   --radius-sm:8px; --radius-md:12px; --radius-lg:16px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --ink-900:#F3EFE6; --ink-700:#C9C2B4; --ink-500:#928B7C;
     --line:#3A362F; --line-2:#4A4539; --paper-0:#1B1813; --paper-1:#221E18; --white:#262119;
+    --danger:#C15A4A;
+    /* stock shadcn neutral — dark */
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
   }
 }
 :root[data-theme="dark"] {
   --ink-900:#F3EFE6; --ink-700:#C9C2B4; --ink-500:#928B7C;
   --line:#3A362F; --line-2:#4A4539; --paper-0:#1B1813; --paper-1:#221E18; --white:#262119;
+  --danger:#C15A4A;
+  /* stock shadcn neutral — dark */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+}
+
+/* ============================================================
+   shadcn/ui theme (stock)
+   Standard shadcn mapping: each semantic --color-* token points at the
+   stock oklch scale defined in :root above (neutral base), so shadcn
+   components render with their default styling. Dark values are wired to
+   the project's existing data-theme / prefers-color-scheme switch below.
+   `--font-sans`/`--font-heading` point at the project's local font stacks
+   (no next/font CDN dependency). Radius stays on the 8/12/16 scale that
+   the bespoke page CSS already uses.
+   ============================================================ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --font-heading: var(--sans);
+  --font-sans: var(--sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 /* Base reset lives in the `base` layer so utility classes (e.g. a Button
    rendered as <a>) win over `a { color: inherit }`. */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
-  body { margin: 0; }
+  html, body { overflow-x: hidden; }
+  body { margin: 0;
+    @apply bg-background text-foreground; }
   body {
     background: var(--paper-0);
     color: var(--ink-900);
@@ -64,6 +198,12 @@
   img { max-width: 100%; display: block; }
   a { color: inherit; }
   dl, dt, dd { margin: 0; }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+  }
 }
 
 .container { max-width: 1200px; margin: 0 auto; padding-inline: clamp(20px, 4vw, 40px); }
@@ -97,14 +237,14 @@
   font-family: var(--serif); font-weight: 400; letter-spacing: -0.02em; text-wrap: balance;
   font-size: clamp(1.9rem, 3.4vw, 2.9rem); line-height: 1.1; margin: 0;
 }
-.section-head p { color: var(--ink-500); font-size: 1.05rem; max-width: 52ch; margin: var(--s4) 0 0; }
+.section-head p { color: var(--ink-500); font-size: 1.1rem; line-height: 1.65; max-width: 52ch; margin: var(--s4) 0 0; }
 
 /* Buttons are the shadcn <Button> component (src/components/ui/button.tsx),
    styled with warm-monochrome utility classes. The only thing that can't live
    in the component is context-dependent inversion on dark sections — these
    unlayered rules override the (layered) utility colors by cascade. */
-.on-dark [data-slot="button"][data-variant="primary"] { background: var(--dark-ink); color: var(--dark-bg); }
-.on-dark [data-slot="button"][data-variant="primary"]:hover { background: #fff; color: var(--dark-bg); }
+.on-dark [data-slot="button"][data-variant="default"] { background: var(--dark-ink); color: var(--dark-bg); }
+.on-dark [data-slot="button"][data-variant="default"]:hover { background: #fff; color: var(--dark-bg); }
 .on-dark [data-slot="button"][data-variant="outline"] { background: transparent; color: var(--dark-ink); border-color: var(--dark-mut); }
 .on-dark [data-slot="button"][data-variant="outline"]:hover { background: var(--dark-ink); color: var(--dark-bg); }
 
@@ -172,7 +312,7 @@
 .about__grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: var(--s8); align-items: center; }
 .about__media { aspect-ratio: 4/5; }
 .about h2 { font-size: clamp(1.9rem, 3.4vw, 2.9rem); line-height: 1.1; margin: 0 0 var(--s5); }
-.about p { color: var(--ink-700); font-size: 1.05rem; max-width: 52ch; margin: 0 0 var(--s5); }
+.about p { color: var(--ink-700); font-size: 1.1rem; line-height: 1.65; max-width: 52ch; margin: 0 0 var(--s5); }
 .about__tagline { font-size: 1.35rem; font-style: italic; color: var(--ink-900); margin: var(--s6) 0 0; }
 .about__stats { display: flex; gap: var(--s8); margin-top: var(--s7); border-top: 1px solid var(--line-2); }
 .about__stats .stat { padding-block: var(--s5) 0; }
@@ -216,9 +356,9 @@
 .why__check { flex: none; font-family: var(--sans); color: var(--dark-ink); }
 
 /* INDUSTRIES */
-.industries__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--line-2); }
+.industries__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 var(--s7); border-top: 1px solid var(--line-2); }
 .industries__grid li { font-size: 1rem; color: var(--ink-700); padding: var(--s4) var(--s4) var(--s4) var(--s6); border-bottom: 1px solid var(--line); position: relative; }
-.industries__grid li::before { content: ""; position: absolute; left: var(--s3); top: 50%; width: 5px; height: 5px; border-radius: 50%; background: var(--ink-500); transform: translateY(-50%); }
+.industries__grid li::before { content: ""; position: absolute; left: var(--s3); top: calc(var(--s4) + 0.8em); width: 5px; height: 5px; border-radius: 50%; background: var(--ink-500); transform: translateY(-50%); }
 
 /* TESTIMONIALS */
 .quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s5); }
@@ -254,15 +394,11 @@
 .contact-form { display: flex; flex-direction: column; gap: var(--s4); background: var(--paper-1); border: 1px solid var(--line); border-radius: var(--radius-md); padding: var(--s6); }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
 .field { display: flex; flex-direction: column; gap: var(--s2); }
-.field label { font-family: var(--sans); font-size: 0.82rem; font-weight: 600; color: var(--ink-700); }
 .field .opt { font-weight: 400; color: var(--ink-500); }
-.field input, .field select, .field textarea {
-  font-family: var(--sans); font-size: 0.98rem; color: var(--ink-900);
-  background: var(--paper-0); border: 1px solid var(--line-2); border-radius: var(--radius-sm);
-  padding: 12px 14px; width: 100%;
-}
-.field textarea { resize: vertical; }
-.field :where(input, select, textarea):focus-visible { outline: 2px solid var(--ink-900); outline-offset: 2px; border-color: var(--ink-900); }
+/* Form controls are shadcn primitives (Input / Textarea / Select) that style
+   themselves via the stock tokens — only the field layout above is bespoke.
+   The Select trigger defaults to w-fit, so stretch it to fill the field. */
+.field [data-slot="select-trigger"] { width: 100%; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .contact-form [data-slot="button"] { align-self: flex-start; margin-top: var(--s2); }
 .form-note { font-size: 0.9rem; margin: 0; min-height: 1.2em; color: var(--ink-700); }
@@ -340,7 +476,7 @@
   .footer__top { grid-template-columns: 1fr 1fr; gap: var(--s6); }
 }
 @media (max-width: 760px) {
-  .nav__links, .nav .theme-toggle { display: none; }
+  .nav__links, .nav .theme-toggle, .nav__actions [data-slot="button"] { display: none; }
   .nav__burger { display: block; }
   .nav[data-open="true"] .nav__links {
     display: flex; position: absolute; left: 0; right: 0; top: 100%;
@@ -353,4 +489,74 @@
   .footer__top { grid-template-columns: 1fr; }
   .hero__contact { flex-wrap: wrap; }
   .form-row { grid-template-columns: 1fr; }
+}
+
+/* ===== MOBILE BOTTOM NAV ===== */
+.bottom-nav { display: none; }
+.bn-tab {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  padding: 9px 0 7px; color: var(--ink-500); text-decoration: none; background: none; border: 0; cursor: pointer;
+}
+.bn-tab svg { width: 21px; height: 21px; }
+.bn-tab span { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.bn-tab[aria-current="page"] { color: var(--ink-900); }
+
+.bn-sheet__backdrop { position: fixed; inset: 0; background: color-mix(in srgb, var(--dark-bg) 45%, transparent); z-index: 50; }
+.bn-sheet {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 51;
+  background: var(--paper-0); border-top: 1px solid var(--line);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: var(--s5) clamp(20px, 4vw, 40px) calc(var(--s6) + env(safe-area-inset-bottom));
+}
+.bn-sheet__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--s3); }
+.bn-sheet__title { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-500); }
+.bn-sheet__close { background: none; border: 0; color: var(--ink-900); cursor: pointer; display: grid; place-items: center; }
+.bn-sheet__close svg { width: 22px; height: 22px; }
+.bn-sheet nav a { display: block; padding: var(--s4) 0; border-bottom: 1px solid var(--line); font-family: var(--serif); font-size: 1.2rem; color: var(--ink-900); text-decoration: none; }
+.bn-sheet__cta { margin-top: var(--s5); width: 100%; justify-content: center; }
+
+@media (max-width: 760px) {
+  .bottom-nav {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    background: color-mix(in srgb, var(--paper-0) 92%, transparent);
+    backdrop-filter: blur(10px); border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .nav__burger { display: none; }          /* replaced by the bottom tab bar */
+  body { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
 }

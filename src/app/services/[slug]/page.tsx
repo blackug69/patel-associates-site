@@ -38,7 +38,7 @@ export default async function ServicePage(
           <h1 className="reveal">{service.title}</h1>
           <p className="page-hero__lead reveal">{service.lead}</p>
           <div className="page-hero__actions reveal">
-            <Button asChild variant="primary">
+            <Button asChild variant="default">
               <Link href="/contact">Book a Consultation <span className="arrow" aria-hidden>↗</span></Link>
             </Button>
             <Button asChild variant="outline">
@@ -100,7 +100,7 @@ export default async function ServicePage(
           <p className="eyebrow reveal">Get started</p>
           <h2 className="reveal">Talk to us about {service.title.toLowerCase()}.</h2>
           <div className="cta-strip__actions reveal">
-            <Button asChild variant="primary">
+            <Button asChild variant="default">
               <Link href="/contact">Book a Consultation <span className="arrow" aria-hidden>↗</span></Link>
             </Button>
             <Button asChild variant="outline">

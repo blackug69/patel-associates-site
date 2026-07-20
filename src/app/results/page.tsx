@@ -88,7 +88,7 @@ export default function ResultsPage() {
           <p className="eyebrow reveal">Get started</p>
           <h2 className="reveal">Let&apos;s make your compliance a non-event.</h2>
           <div className="cta-strip__actions reveal">
-            <Button asChild variant="primary">
+            <Button asChild variant="default">
               <Link href="/contact">Book a Consultation <span className="arrow" aria-hidden>↗</span></Link>
             </Button>
             <Button asChild variant="outline">

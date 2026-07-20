@@ -3,6 +3,7 @@ import "./globals.css";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { ScrollReveals } from "@/components/scroll-reveals";
+import { BottomNav } from "@/components/bottom-nav";
 
 // NOTE: Fonts are declared via CSS font stacks in globals.css (Fraunces / Libre
 // Franklin / Spline Sans Mono with system fallbacks) rather than next/font/google,
@@ -23,6 +24,7 @@ export default function RootLayout({
         <SiteNav />
         {children}
         <SiteFooter />
+        <BottomNav />
         <ScrollReveals />
       </body>
     </html>

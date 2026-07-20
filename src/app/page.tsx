@@ -36,13 +36,6 @@ const TESTIMONIALS = [
   { quote: "A tax notice that worried me was handled calmly and correctly. This is the firm I recommend to everyone now.", role: "Director · [Company]" },
 ];
 
-const HOME_FAQS = [
-  { q: "Who should file an Income Tax Return?", a: "Any individual or business whose income meets the applicable legal requirements, or who wishes to claim refunds, carry forward losses, or maintain financial records." },
-  { q: "Do you provide GST Registration?", a: "Yes. We provide complete GST Registration along with post registration compliance support." },
-  { q: "Can you handle bookkeeping for my business?", a: "Yes. We provide regular bookkeeping and accounting services for businesses of all sizes." },
-  { q: "Do you assist startups?", a: "Absolutely. We help startups with business registration, GST, accounting, taxation, and ongoing compliance." },
-  { q: "Can services be provided online?", a: "Yes. Most of our services can be completed digitally, allowing clients across India to work with us conveniently." },
-];
 
 export default function Home() {
   return (
@@ -61,7 +54,7 @@ export default function Home() {
               advisory, under one trusted roof.
             </p>
             <div className="hero__ctas reveal">
-              <Button asChild variant="primary">
+              <Button asChild variant="default">
                 <Link href="/contact">Book a Consultation <span className="arrow" aria-hidden>↗</span></Link>
               </Button>
               <Button asChild variant="outline">
@@ -79,7 +72,7 @@ export default function Home() {
           </div>
           <div className="frame hero__media reveal">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/hero-justice.jpg" alt="Classical stone relief of Justice holding scales and a sword" width={1476} height={2040} />
+            <img src="/images/legacy.jpg" alt="Lady Justice statue holding balanced scales" width={1200} height={800} style={{ objectPosition: "62% center" }} />
           </div>
         </div>
       </section>
@@ -194,34 +187,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="section" id="faq">
-        <div className="container faq__wrap">
-          <div className="section-head reveal">
-            <p className="eyebrow">FAQ</p>
-            <h2>Frequently asked questions.</h2>
-          </div>
-          <div className="faq__list reveal">
-            {HOME_FAQS.map((f) => (
-              <details className="faq__item" key={f.q}>
-                <summary>{f.q}</summary>
-                <p>{f.a}</p>
-              </details>
-            ))}
-          </div>
-          <p className="reveal" style={{ marginTop: "var(--s4)" }}>
-            <Link className="link-ghost" href="/faq">See all FAQs <span className="arrow" aria-hidden>→</span></Link>
-          </p>
-        </div>
-      </section>
-
       {/* CLOSING CTA */}
       <section className="section why on-dark">
         <div className="container cta-strip">
           <p className="eyebrow reveal">Get started</p>
           <h2 className="reveal">Talk to Patel about your compliance.</h2>
           <div className="cta-strip__actions reveal">
-            <Button asChild variant="primary">
+            <Button asChild variant="default">
               <Link href="/contact">Book a Consultation <span className="arrow" aria-hidden>↗</span></Link>
             </Button>
             <Button asChild variant="outline">
